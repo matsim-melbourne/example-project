@@ -1,4 +1,5 @@
 # example-project
+`master`![status?](https://github.com/matsim-melbourne/example-project/workflows/build/badge.svg?branch=master) `dev`![status?](https://github.com/matsim-melbourne/example-project/workflows/build/badge.svg?branch=dev)
 
 An example MATSim model for Melbourne.
 
