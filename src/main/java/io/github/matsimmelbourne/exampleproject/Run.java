@@ -34,7 +34,14 @@ public class Run {
     public static void main(String[] args) {
 
         Config config;
-        config = ConfigUtils.loadConfig( "./scenario/config.xml" );
+        //config = ConfigUtils.loadConfig( "./scenario/config.xml" );
+        if (args == null || args.length == 0 || args[0] == null) {
+            String defaultConfigPath = "scenario/config.xml";
+            System.out.println("using default configuration file from " + defaultConfigPath);
+            config = ConfigUtils.loadConfig(defaultConfigPath);
+        } else {
+            config = ConfigUtils.loadConfig(args);
+        }        
 
         config.controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists );
 
