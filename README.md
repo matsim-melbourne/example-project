@@ -1,10 +1,13 @@
 # example-project
 `master`![status?](https://github.com/matsim-melbourne/example-project/workflows/build/badge.svg?branch=master) `dev`![status?](https://github.com/matsim-melbourne/example-project/workflows/build/badge.svg?branch=dev)
 
-An example MATSim model for Melbourne.
+An example MATSim model for Melbourne for learning and training purposes. 
+This model uses VISTA 2012-16 exact travel plans and a MATSim generated OSM-based network as its inputs.
+
+**NOTE** The model of this repository is NOT based the latest developments from MATSim Melbourne project and must not be considered as the baseline model.
+The Baseline MATSim Melbourne Model can be found in its own dedicated repository [here](https://github.com/matsim-melbourne/baseline).  
 
 By default, this project uses the latest MATSim development head. In order to use a different version, edit [`pom.xml`](./pom.xml).
-
 
 ### Import into IntelliJ
 
