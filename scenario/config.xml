@@ -5,47 +5,65 @@
 	<module name="global">
 		<param name="randomSeed" value="4711" />
 		<param name="coordinateSystem" value="EPSG:28355" />
-		<!-- global number of thread (not including mobsim), adjust based on number of cores you have -->
-       <param name = "numberOfThreads" value="2"/>
-   </module>
+		<!-- global number of threads (not including mobsim): pick CPU cores -->
+		<param name = "numberOfThreads" value="8"/>
+	</module>
 
-   <module name="network">
-       <!-- Road and bicycle infrastructure, no public transport, from RMIT -->
-		<param name="inputNetworkFile" value="./data/network-carBicycle-noPt-rmit.xml.gz" />
+	<module name="network">
+		<!-- Road and bicycle infrastructure with public transport, from RMIT -->
+		<param name="inputNetworkFile" value="./data/smallNetworkAll.xml.gz" />
 	</module>
 
 	<module name="plans">
-		<!-- 1% sample  -->
-		<param name="inputPlansFile" value="./data/plans-1pct-vista18.xml.gz" />
-</module>
+		<!-- 1% sample -->
+		<param name="inputPlansFile" value="./data/planSmall_10pt.xml.gz" />
+	</module>
 
-<module name="controler">
-    <param name="outputDirectory" value="./output/example" />
-    <param name="firstIteration" value="0" />
-    <param name="lastIteration" value="0" />
-    <param name="mobsim" value="qsim" />
-</module>
+	<module name="controler">
+		<param name="outputDirectory" value="./output/example-pt/" />
+		<param name="firstIteration" value="0" />
+		<param name="lastIteration" value="0" />
+		<param name="mobsim" value="qsim" />
+	</module>
 
-<module name="qsim">
-    <param name="mainMode" value="car" />
-	<!-- threads for QSim, adjust based on number of cores you have -->
-    <param name = "numberOfThreads" value="1"/>
-		<!--<param name = "flowCapacityFactor" value = "0.1"/> --> <!-- use this with 10pct sample -->
-		<!--<param name = "storageCapacityFactor" value = "0.1"/>-->  <!-- use this with 10pct sample -->
-		<!--<param name = "flowCapacityFactor" value = "0.05"/> --> <!-- use this with 5pct sample -->
-		<!--<param name = "storageCapacityFactor" value = "0.065"/> --> <!-- use this with 5pct sample -->
-		<param name = "flowCapacityFactor" value = "0.01"/> <!-- use this with 1pct sample -->
-		<param name = "storageCapacityFactor" value = "0.02"/> <!-- use this with 1pct sample -->
-	<param name = "startTime" value="00:00:00"/>
-    <param name = "endTime" value="30:00:00"/>
-</module>
+	<module name="transit">
+		<param name="transitScheduleFile" value="./data/transitSchedule.xml.gz" />
+		<param name="vehiclesFile" value="./data/transitVehicles.xml.gz" />
+		<param name="transitModes" value="pt" />
+		<param name="useTransit" value="true" />
+		<param name="routingAlgorithmType" value="SwissRailRaptor" />
+
+	</module>
+
+	<module name="swissRailRaptor">
+		<param name="useCapacityConstraints" value="true" />
+		<parameterset type="intermodalAccessEgress">
+			<param name="mode" value="bike" />
+			<param name="maxRadius" value="3000" />
+			<param name="stopFilterValue" value="true" />
+		</parameterset>
+	</module>
+
+	<module name="qsim">
+		<param name="vehiclesSource" value="modeVehicleTypesFromVehiclesData" />
+		<param name="mainMode" value="car,bike" />
+		<param name="linkDynamics" value="PassingQ" />
+		<param name="trafficDynamics" value="kinematicWaves" />
+
+		<!-- threads for QSim, adjust based on number of cores you have -->
+		<param name = "numberOfThreads" value="8"/>
+		<param name = "flowCapacityFactor" value = "0.1"/>  <!-- 10pct sample -->
+		<param name = "storageCapacityFactor" value = "0.1"/>  <!-- 10pct sample -->
+		<param name = "startTime" value="00:00:00"/>
+		<param name = "endTime" value="30:00:00"/>
+	</module>
 
 	<module name="parallelEventHandling">
-		<param name="estimatedNumberOfEvents" value="null" />
 		<!-- Null means let matsim decide -->
-		<param name="numberOfThreads" value="null" />
+		<param name="estimatedNumberOfEvents" value="null" />
 		<!-- each handler will be assigned to a thread if enabled -->
-		<param name="oneThreadPerHandler" value="false" />
+		<param name="numberOfThreads" value="8" />
+		<param name="oneThreadPerHandler" value="true" />
 	</module>
 
 	<module name="planCalcScore">
@@ -125,40 +143,35 @@
 				<param name="typicalDuration" value="00:30:00" />
 			</parameterset>
 
-			<parameterset type="modeParams">
-				<param name="mode" value="car"/>
+			<parameterset type="modeParams" ><!-- car -->
+				<param name="mode" value="car" />
 				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
 			</parameterset>
 
-			<parameterset type="modeParams" >
-				<param name="constant" value="0.0" />
-				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
+			<parameterset type="modeParams" ><!-- pt -->
 				<param name="mode" value="pt" />
-				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
 
-			<parameterset type="modeParams" >
-				<param name="constant" value="0.0" />
-				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
-				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
+			<parameterset type="modeParams" ><!-- walk -->
 				<param name="mode" value="walk" />
-				<param name="monetaryDistanceRate" value="0.0" />
-			</parameterset>
-
-			<parameterset type="modeParams" >
 				<param name="constant" value="0.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
 				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+			<parameterset type="modeParams" ><!-- bike -->
 				<param name="mode" value="bike" />
-				<param name="monetaryDistanceRate" value="0.0" />
-			</parameterset>
-
-			<parameterset type="modeParams" >
 				<param name="constant" value="0.0" />
 				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
 				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+
+			<parameterset type="modeParams" ><!-- other -->
 				<param name="mode" value="other" />
+				<param name="constant" value="0.0" />
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+				<param name="marginalUtilityOfTraveling_util_hr" value="-6.0" />
 				<param name="monetaryDistanceRate" value="0.0" />
 			</parameterset>
 		</parameterset>
@@ -167,15 +180,8 @@
 
 	<module name="planscalcroute" >
 
-		<!-- All the modes for which the router is supposed to generate network routes (like car) -->
-		<param name="networkModes" value="car" />
-
-		<parameterset type="teleportedModeParameters" >
-			<param name="beelineDistanceFactor" value="1.3" />
-			<param name="mode" value="bike" />
-			<param name="teleportedModeFreespeedFactor" value="null" />
-			<param name="teleportedModeSpeed" value="20.0" />
-		</parameterset>
+		<!-- List modes the router should generate network routes for (e.g. car) -->
+		<param name="networkModes" value="car,bike" />
 
 		<parameterset type="teleportedModeParameters" >
 			<param name="beelineDistanceFactor" value="1.3" />
@@ -186,37 +192,35 @@
 
 		<parameterset type="teleportedModeParameters" >
 			<param name="beelineDistanceFactor" value="1.3" />
-			<param name="mode" value="pt" />
-			<param name="teleportedModeFreespeedFactor" value="null" />
-			<param name="teleportedModeSpeed" value="20.0" />
-		</parameterset>
-
-
-		<parameterset type="teleportedModeParameters" >
-			<param name="beelineDistanceFactor" value="1.3" />
 			<param name="mode" value="walk" />
 			<param name="teleportedModeFreespeedFactor" value="null" />
 			<param name="teleportedModeSpeed" value="20.0" />
 		</parameterset>
 
+
 	</module>
+
+	<module name="vehicles" >
+		<param name="vehiclesFile" value="mode-vehicles.xml" />
+	</module>
+
 
 	<module name="strategy">
 		<param name="maxAgentPlanMemorySize" value="5" /> <!-- 0 means unlimited -->
 
 		<parameterset type="strategysettings">
 			<param name="strategyName" value="BestScore"/>
-			<param name="weight" value="0.9"/>
+			<param name="weight" value="0.8"/>
 		</parameterset>
 
 		<parameterset type="strategysettings">
 			<param name="strategyName" value="ReRoute"/>
-			<param name="weight" value="0.1"/>
+			<param name="weight" value="0.2"/>
 		</parameterset>
 	</module>
 
 	<module name="travelTimeCalculator" >
-		<param name="analyzedModes" value="car" />
+		<param name="analyzedModes" value="car,bike,walk,pt" />
 		<param name="separateModes" value="true" />
 	</module>
 
