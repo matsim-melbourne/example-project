@@ -4,7 +4,7 @@ package io.github.matsimmelbourne.exampleproject;
  * #%L
  * Example Project
  * %%
- * Copyright (C) 2020 by its authors.
+ * Copyright (C) 2020 - 2021 by its authors.
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,6 +22,10 @@ package io.github.matsimmelbourne.exampleproject;
  * #L%
  */
 
+
+import ch.sbb.matsim.mobsim.qsim.SBBTransitModule;
+import ch.sbb.matsim.mobsim.qsim.pt.SBBTransitEngineQSimModule;
+import ch.sbb.matsim.routing.pt.raptor.SwissRailRaptorModule;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
@@ -42,6 +46,16 @@ public class Run {
 
         Controler controler = new Controler( scenario ) ;
 
+        // To use the deterministic pt simulation (Part 1 of 2):
+        controler.addOverridingModule(new SBBTransitModule());
+
+        // To use the fast pt router (Part 1 of 1)
+        controler.addOverridingModule(new SwissRailRaptorModule());
+
+        // To use the deterministic pt simulation (Part 2 of 2):
+        controler.configureQSimComponents(components -> {
+                    SBBTransitEngineQSimModule.configure(components);
+        });
         controler.run();
     }
 }

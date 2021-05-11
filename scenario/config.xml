@@ -20,7 +20,7 @@
 	</module>
 
 	<module name="controler">
-		<param name="outputDirectory" value="./output/example-pt/" />
+		<param name="outputDirectory" value="./output/example-pt5/" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="0" />
 		<param name="mobsim" value="qsim" />
@@ -32,14 +32,16 @@
 		<param name="transitModes" value="pt" />
 		<param name="useTransit" value="true" />
 		<param name="routingAlgorithmType" value="SwissRailRaptor" />
-
 	</module>
 
 	<module name="swissRailRaptor">
 		<param name="useCapacityConstraints" value="true" />
+		<param name="useIntermodalAccessEgress" value="true" />
 		<parameterset type="intermodalAccessEgress">
-			<param name="mode" value="bike" />
-			<param name="maxRadius" value="3000" />
+			<param name="mode" value="walk" />
+			<param name="maxRadius" value="1000" />
+			<param name="searchExtensionRadius" value="1000" />
+			<param name="initialSearchRadius" value="1000" />
 			<param name="stopFilterValue" value="true" />
 		</parameterset>
 	</module>
@@ -177,7 +179,6 @@
 		</parameterset>
 	</module>
 
-
 	<module name="planscalcroute" >
 
 		<!-- List modes the router should generate network routes for (e.g. car) -->
@@ -197,13 +198,11 @@
 			<param name="teleportedModeSpeed" value="20.0" />
 		</parameterset>
 
-
 	</module>
 
 	<module name="vehicles" >
 		<param name="vehiclesFile" value="mode-vehicles.xml" />
 	</module>
-
 
 	<module name="strategy">
 		<param name="maxAgentPlanMemorySize" value="5" /> <!-- 0 means unlimited -->
