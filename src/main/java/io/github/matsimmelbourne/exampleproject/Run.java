@@ -31,31 +31,36 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
+import org.matsim.core.network.algorithms.MultimodalNetworkCleaner;
 import org.matsim.core.scenario.ScenarioUtils;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Run {
 
     public static void main(String[] args) {
 
         Config config;
-        config = ConfigUtils.loadConfig( "./scenario/config.xml" );
+        config = ConfigUtils.loadConfig( "./scenario/config2.xml" );
 
         config.controler().setOverwriteFileSetting( OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists );
 
         Scenario scenario = ScenarioUtils.loadScenario(config) ;
 
+        Set<String> mode_Set = new HashSet<String>();
+        mode_Set.add("car");
+        new MultimodalNetworkCleaner(scenario.getNetwork()).run(mode_Set);
+
+        Set<String> mode_Set2 = new HashSet<String>();
+        mode_Set2.add("bike");
+        new MultimodalNetworkCleaner(scenario.getNetwork()).run(mode_Set2);
+
         Controler controler = new Controler( scenario ) ;
 
-        // To use the deterministic pt simulation (Part 1 of 2):
         controler.addOverridingModule(new SBBTransitModule());
 
-        // To use the fast pt router (Part 1 of 1)
         controler.addOverridingModule(new SwissRailRaptorModule());
 
-        // To use the deterministic pt simulation (Part 2 of 2):
-        controler.configureQSimComponents(components -> {
-                    SBBTransitEngineQSimModule.configure(components);
-        });
         controler.run();
     }
 }
