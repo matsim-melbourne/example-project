@@ -13,7 +13,7 @@
 
 <properties>
   <!-- release -->
-   <matsim.version>12.0</matsim.version>
+   <matsim.version>13.0</matsim.version>
 
   <!-- weekly "release" -->
   <!-- see http://oss.jfrog.org/libs-snapshot/org/matsim/matsim/ -->
@@ -45,23 +45,13 @@
   <repository>
     <!-- For MATSim releases: -->
     <id>matsim</id>
-    <url>https://dl.bintray.com/matsim/matsim</url>
+    <url>https://repo.matsim.org/repository/matsim</url>
   </repository>
   <repository>
     <!-- For MATSim monthly snapshots: -->
     <id>bintray-matsim-eth-matsim</id>
     <name>bintray</name>
     <url>https://dl.bintray.com/matsim-eth/matsim</url>
-  </repository>
-  <repository>
-    <!-- For MATSim snapshots: -->
-    <id>ojo-snapshots</id>
-    <url>http://oss.jfrog.org/libs-snapshot</url>
-  </repository>
-  <repository>
-    <!-- For SBB Extension -->
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
   </repository>
   <repository>
     <!-- for dependencies of osm-network-reader -->
@@ -153,6 +143,11 @@
     <artifactId>osm</artifactId>
     <version>${matsim.version}</version>
   </dependency>
+  <dependency>
+    <groupId>org.matsim.contrib</groupId>
+    <artifactId>sbb-extensions</artifactId>
+    <version>${matsim.version}</version>
+  </dependency>
 
   <dependency>
     <groupId>org.apache.commons</groupId>
@@ -174,20 +169,6 @@
     <scope>test</scope>
   </dependency>
 
-  <!-- Include SBB MATSim Extensions local version: -->
-  <!-- <dependency>
-    <groupId>com.github.vsp-gleich</groupId>
-    <artifactId>matsim-sbb-extensions</artifactId>
-    <version>11.6-vsp-2019-SNAPSHOT</version>
-  </dependency>-->
-
-  <!-- Include SBB MATSim Extensions from jitpack: -->
-  <!-- Note that this will also pick up the local version if that local version has com.github.XXX as groupId!-->
-  <dependency>
-    <groupId>com.github.vsp-gleich</groupId>
-    <artifactId>matsim-sbb-extensions</artifactId>
-    <version>11.6-vsp-2019-09-20b</version>
-  </dependency>
 </dependencies>
 
 <build>
